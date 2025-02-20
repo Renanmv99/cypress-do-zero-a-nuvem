@@ -119,7 +119,7 @@ input[type="radio"] {
 }
 
 .error {
-    background-color: #a786df;
+    background-color: #ff3131;
 }
 
 .success, .error {
