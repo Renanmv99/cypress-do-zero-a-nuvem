@@ -1,5 +1,3 @@
-import '../support/commands'
-
 describe('Central de Atendimento ao Cliente TAT', () => {
 
   //Ex 01.
@@ -19,43 +17,43 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('#email').type('renanvicente@gmail.com')
     cy.get('#phone').type('99999999')
     cy.get('#open-text-area').type(longText, { delay: 0 })
-    cy.get('button[type="submit"]').click()
+    cy.contains('button', 'Enviar').click()
 
     cy.get('.success').should('be.visible')
   })
 
-  //Ex 02.
+  //Extra 02.
   it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
     cy.get('#firstName').type('Renan')
     cy.get('#lastName').type('Vicente')
     cy.get('#phone').type('99999999')
     cy.get('#email').type('testeEmailInvalido')
     cy.get('#open-text-area').type('teste')
-    cy.get('button[type="submit"]').click()
+    cy.contains('button', 'Enviar').click()
 
     cy.get('.error').should('be.visible')
   })
 
-  //Ex 03.
+  //Extra 03.
   it('numero com valor não numérico permanece vazio', () => {
     cy.get('#phone')
       .type('testeValorNaoNumerico')
       .should('have.value', '')
   })
 
-  //Ex 04.
+  //Extra 04.
   it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
     cy.get('#firstName').type('Renan')
     cy.get('#lastName').type('Vicente')
     cy.get('#email').type('renanvicente@gmail.com')
     cy.get('#open-text-area').type('teste')
     cy.get('#phone-checkbox').click()
-    cy.get('button[type="submit"]').click()
+    cy.contains('button', 'Enviar').click()
 
     cy.get('.error').should('be.visible')
   })
 
-  //Ex 05.
+  //Extra 05.
   it('preenche e limpa os campos nome, sobrenome, email e telefone', () => {
     cy.get('#firstName')
       .type('Renan')
@@ -82,16 +80,65 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       .should('have.value', '')
   })
 
-  //Ex 06.
+  //Extra 06.
   it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
-    cy.get('button[type="submit"]').click()
+    cy.contains('button', 'Enviar').click()
 
     cy.get('.error').should('be.visible')
   })
 
-  //Ex 07.
-  it.only('envia o formuário com sucesso usando um comando customizado' ,() => {
-    cy.fillMandatoryFieldsAndSubmit()
+  //Extra 07.
+  it('envia o formuário com sucesso usando um comando customizado' ,() => {
+    const data = {
+      firstName: "Renan",
+      lastName: "Vicente",
+      email: "renanvicente@gmail.com",
+      text: "TESTE"
+    }
+
+    cy.fillMandatoryFieldsAndSubmit(data)
+    cy.get('.success').should('be.visible')
+  })
+
+//----------------------------------------------------------------------------------------------------------------------------------------------
+  
+  //Ex 02.
+  it('seleciona um produto (YouTube) por seu texto', () => {
+      cy.get('#product')
+        .select('YouTube')
+        .should('have.value', 'youtube')
+  })
+
+  //Extra 01
+  it('seleciona um produto (Mentoria) por seu valor (value)', () => {
+    cy.contains('select', 'Mentoria')
+      .select('Mentoria')
+      .should('have.value', "mentoria")
+  })
+
+  //Extra 02
+  it('seleciona um produto (Blog) por seu índice', () => {
+    cy.get('#product')
+      .select(1)
+      .should('have.value', 'blog')
+  })
+
+//----------------------------------------------------------------------------------------------------------------------------------------------
+
+  //Ex 03.
+  it('marca o tipo de atendimento "Feedback"', () => {
+    cy.get('input[type=radio][value="feedback"]')
+      .check()
+      .should('be.checked')
+  })
+
+  //Extra 01
+  it('marca cada tipo de atendimento', () => {
+    cy.get('input[type=radio]')
+      .each( typeofService => {
+        cy.wrap(typeofService)
+          .check()
+          .should('be.checked')
+      })
   })
 })
-
