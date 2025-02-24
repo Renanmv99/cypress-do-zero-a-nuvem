@@ -155,11 +155,18 @@ describe('Central de Atendimento ao Cliente TAT', () => {
 
 //----------------------------------------------------------------------------------------------------------------------------------------------
   //Ex 05.
-  it.only('seleciona um arquivo da pasta fixtures', () =>{
+  it('seleciona um arquivo da pasta fixtures', () =>{
     cy.get('#file-upload')
       .selectFile('cypress/fixtures/example.json')
       .should(input => {
         expect(input[0].files[0].name).to.equal('example.json')
       })
+  })
+
+//----------------------------------------------------------------------------------------------------------------------------------------------
+  //Ex 06.
+  it.only('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
+    cy.get('a')
+      .should('have.attr', 'target', '_blank')
   })
 })
